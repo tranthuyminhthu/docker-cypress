@@ -22,9 +22,11 @@ pipeline {
                         stage('Run Tests') {  
                             steps {  
                                 script {  
+                                    // Đảm bảo docker đang chạy  
                                     bat "docker --version"  
                                     bat "echo Running Cypress tests on Agent 1..."  
-                                    bat "npx cypress run"  
+                                    // Ở đây, npx cypress run cần đảm bảo nằm trong Docker container.  
+                                    bat "docker exec \$(docker ps -qf ancestor=cypress/included:12.16.0) npx cypress run"  
                                 }  
                             }  
                         }  
