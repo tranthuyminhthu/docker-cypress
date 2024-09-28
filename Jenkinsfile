@@ -27,9 +27,9 @@ pipeline {
                     def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')  
   
                     // Chạy Cypress tests bên trong Docker container  
-                    bat """  
-                    docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 sh -c "npx cypress run"  
-                    """  
+bat """    
+docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 sh -c 'npx cypress run'    
+"""
                 }  
             }  
         }  
