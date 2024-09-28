@@ -11,11 +11,9 @@ pipeline {
                 script {  
                     def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')  
   
-                    // Chạy npm install để cài đặt các dependency  
+                    // Run npm install to install dependency  
                     bat """  
-                    docker run --rm -v ${workspace}:/workspace -w /workspace node:14-alpine sh -c '  
-                    npm install  
-                    '  
+                    docker run --rm -v ${workspace}:/workspace -w /workspace node:14-alpine sh -c "npm install"  
                     """  
                 }  
             }  
@@ -25,11 +23,9 @@ pipeline {
                 script {  
                     def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')  
   
-                    // Chạy Cypress tests bên trong Docker container  
+                    // Run Cypress tests in Docker container  
                     bat """  
-                    docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 sh -c '  
-                    npx cypress run  
-                    '  
+                    docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 sh -c "npx cypress run"  
                     """  
                 }  
             }  
