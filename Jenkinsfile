@@ -5,13 +5,15 @@ pipeline {
             parallel {  
                 stage('Test on Agent 1') {  
                     agent {  
+                        // Sử dụng đường dẫn Unix-style cho Docker trên Windows  
                         docker {  
                             image 'cypress/included:12.16.0'  
-                            args '--workdir /workspace -v C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace'  
+                            args '--workdir /workspace -v /c/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace'  
                         }  
                     }  
                     environment {  
-                        WORKSPACE = 'C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test'  
+                        // Đảm bảo đường dẫn Unix-style  
+                        WORKSPACE = '/c/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test'  
                     }  
                     stages {  
                         stage('Checkout Code') {  
@@ -22,11 +24,11 @@ pipeline {
                         stage('Run Tests') {  
                             steps {  
                                 script {  
-                                    // Đảm bảo docker đang chạy  
+                                    // Đảm bảo Docker đang chạy  
                                     bat "docker --version"  
                                     bat "echo Running Cypress tests on Agent 1..."  
-                                    // Ở đây, npx cypress run cần đảm bảo nằm trong Docker container.  
-                                    bat "docker exec \$(docker ps -qf ancestor=cypress/included:12.16.0) npx cypress run"  
+                                    // Chạy npx cypress run ngay trong script block  
+                                    bat "docker run --rm -v /c/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace cypress/included:12.16.0 npx cypress run"  
                                 }  
                             }  
                         }  
