@@ -7,7 +7,7 @@ pipeline {
             }    
         }    
           
-        // Chỉnh sửa phần script để cài đặt dependencies    
+        // Chỉnh sửa phần script để cài đặt dependencies     mm
         stage('Install Dependencies') {  
             steps {      
                 script {      
