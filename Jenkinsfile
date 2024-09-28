@@ -8,7 +8,7 @@ pipeline {
                         docker {
                             image 'cypress/included:12.16.0'
                             label 'cypress-agent'
-                            args '-v /c/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test/:/workspace'
+                            args '-v C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test/:/workspace'
                         }
                     }
                     steps {
