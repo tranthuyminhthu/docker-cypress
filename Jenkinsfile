@@ -1,39 +1,24 @@
 pipeline {  
-    agent none  
+    agent any  
     stages {  
-        stage('Parallel Cypress Testing') {  
-            parallel {  
-                stage('Test on Agent 1') {  
-                    agent {  
-                        docker {  
-                            image 'cypress/included:12.16.0'  
-                            // Chuyển đổi tất cả các đường dẫn sang Unix-style  
-                            args '--workdir /workspace -v /c/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace'  
-                        }  
-                    }  
-                    environment {  
-                        WORKSPACE = '/workspace'  
-                    }  
-                    stages {  
-                        stage('Checkout Code') {  
-                            steps {  
-                                checkout scm  
-                            }  
-                        }  
-                        stage('Run Tests') {  
-                            steps {  
-                                script {  
-                                    // Kiểm tra phiên bản Docker  
-                                    sh 'docker --version'  
-                                    echo "Running Cypress tests on Agent 1..."  
-                                    // Chạy npx cypress run  trong Docker container  
-                                    sh 'npx cypress run'  
-                                }  
-                            }  
-                        }  
-                    }  
+        stage('Checkout Code') {  
+            steps {  
+                checkout scm  
+            }  
+        }  
+        stage('Run Cypress Tests in Docker') {  
+            steps {  
+                script {  
+                    // Tìm vị trí hiện tại của thư mục workspace  
+                    def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')  
+  
+                    bat """  
+                    docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 sh -c '  
+                    npx cypress run  
+                    '  
+                    """  
                 }  
             }  
         }  
     }  
-}  
+} 
