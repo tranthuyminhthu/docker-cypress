@@ -7,8 +7,11 @@ pipeline {
                     agent {  
                         docker {  
                             image 'cypress/included:12.16.0'  
-                            args '-v C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace'  
+                            args '--workdir /workspace -v C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test:/workspace'  
                         }  
+                    }  
+                    environment {  
+                        WORKSPACE = 'C:/ProgramData/Jenkins/.jenkins/workspace/Parallel-Cypress-Test'  
                     }  
                     stages {  
                         stage('Checkout Code') {  
@@ -18,8 +21,11 @@ pipeline {
                         }  
                         stage('Run Tests') {  
                             steps {  
-                                echo 'Running Cypress tests on Agent 1...'  
-                                bat 'npx cypress run'  
+                                script {  
+                                    bat "docker --version"  
+                                    bat "echo Running Cypress tests on Agent 1..."  
+                                    bat "npx cypress run"  
+                                }  
                             }  
                         }  
                     }  
