@@ -9,13 +9,9 @@ pipeline {
               
         stage('Install Dependencies') {      
             steps {          
-                script {          
-                    def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')          
-                          
-                    // Chạy npm install để cài đặt các dependency          
-                    bat """          
-                    docker run --rm -v ${workspace}:/workspace -w /workspace node:14-alpine /bin/sh -c "npm install"        
-                    """          
+                script {  
+                    // Chạy npm install trực tiếp trên Jenkins host  
+                    bat "npm install"  
                 }          
             }      
         }      
@@ -23,8 +19,8 @@ pipeline {
         stage('Run Cypress Tests in Docker') {          
             steps {          
                 script {          
-                    def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')          
-                          
+                    def workspace = env.WORKSPACE.replace('\\', '/').replace('C:', '/c')  
+                      
                     // Chạy Cypress tests bên trong Docker container          
                     bat """          
                     docker run --rm -v ${workspace}:/workspace -w /workspace cypress/included:12.16.0 /bin/sh -c "npx cypress run"  
@@ -33,4 +29,4 @@ pipeline {
             }          
         }      
     }        
-}  
+}
