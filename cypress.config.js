@@ -3,7 +3,6 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   screenshotsFolder:"cypress/reports/mochareports/assets",
   projectId: 'zoivxh',
-  "reporter": "cypress-multi-reporters",
   "reporterOptions":{
     "reporterEnabled": "mochawesome",
     "mochawesomeReporterOptions":{
