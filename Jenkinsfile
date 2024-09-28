@@ -8,7 +8,6 @@ pipeline {
                         docker {
                             image 'cypress/included:12.16.0'
                             label 'cypress-agent'
-                            args '-v C:/Users/YourUser/.cache/Cypress:/root/.cache/Cypress'
                         }
                     }
                     steps {
@@ -16,7 +15,6 @@ pipeline {
                         bat 'npx cypress run'
                     }
                 }
-                // Tương tự cho các agents khác
             }
         }
     }
