@@ -1,34 +1,48 @@
 pipeline {
-    agent any
-
+    agent none
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
+        stage('Parallel Cypress Testing') {
+            parallel {
+                stage('Test on Agent 1') {
+                    agent {
+                        docker {
+                            image 'cypress/included:12.16.0'
+                            label 'cypress-agent'
+                            args '-v /root/.cache/Cypress:/root/.cache/Cypress'
+                        }
+                    }
+                    steps {
+                        echo 'Running Cypress tests on Agent 1...'
+                        sh 'npx cypress run'
+                    }
+                }
+                stage('Test on Agent 2') {
+                    agent {
+                        docker {
+                            image 'cypress/included:12.16.0'
+                            label 'cypress-agent'
+                            args '-v /root/.cache/Cypress:/root/.cache/Cypress'
+                        }
+                    }
+                    steps {
+                        echo 'Running Cypress tests on Agent 2...'
+                        sh 'npx cypress run'
+                    }
+                }
+                stage('Test on Agent 3') {
+                    agent {
+                        docker {
+                            image 'cypress/included:12.16.0'
+                            label 'cypress-agent'
+                            args '-v /root/.cache/Cypress:/root/.cache/Cypress'
+                        }
+                    }
+                    steps {
+                        echo 'Running Cypress tests on Agent 3...'
+                        sh 'npx cypress run'
+                    }
+                }
             }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                bat 'npm install'
-            }
-        }
-
-        stage('Run Cypress Tests') {
-            steps {
-                bat 'npm run test' // Sử dụng lệnh test đã được định nghĩa trong package.json
-            }
-        }
-    }
-    post {
-        always {
-            cleanWs()
-        }
-        success {
-            echo 'Build succeeded!'
-        }
-        failure {
-            echo 'Build failed.'
         }
     }
 }
